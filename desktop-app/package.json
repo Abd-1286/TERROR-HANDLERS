@@ -1,13 +1,51 @@
 {
-  "name": "desktop-app",
+  "name": "findesk",
+  "productName": "FinDesk",
   "version": "1.0.0",
-  "main": "main.js", 
+  "description": "FinDesk — a 100% local, offline-first personal finance toolkit.",
+  "author": "FinDesk",
+  "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build:web": "npm --prefix ../web-app run build",
-    "app": "npm run build:web && electron ."
+    "app": "npm run build:web && electron .",
+    "dist": "npm run build:web && electron-builder --win"
+  },
+  "build": {
+    "appId": "com.findesk.app",
+    "productName": "FinDesk",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../web-app/dist",
+        "to": "renderer"
+      }
+    ],
+    "win": {
+      "target": [
+        "portable",
+        "nsis"
+      ]
+    },
+    "portable": {
+      "artifactName": "FinDesk-${version}-portable.exe"
+    },
+    "nsis": {
+      "artifactName": "FinDesk-Setup-${version}.exe",
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "FinDesk"
+    }
   },
   "devDependencies": {
-    "electron": "^31.0.0"
+    "electron": "^31.0.0",
+    "electron-builder": "^25.1.8"
   }
 }

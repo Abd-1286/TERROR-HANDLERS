@@ -3,7 +3,11 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 
-const DIST = path.join(__dirname, "..", "web-app", "dist");
+// Packaged: the built web app is bundled under resources/renderer.
+// Dev: it lives in the sibling web-app/dist folder.
+const DIST = app.isPackaged
+  ? path.join(process.resourcesPath, "renderer")
+  : path.join(__dirname, "..", "web-app", "dist");
 const DEV_URL = "http://localhost:5173"; // Vite dev server (if running)
 const STATIC_PORT = 5180; // local server for the built app
 
@@ -76,9 +80,9 @@ function isUp(url) {
 }
 
 async function resolveAppUrl() {
-  if (await isUp(DEV_URL)) return DEV_URL; // dev: hot reload
+  if (!app.isPackaged && (await isUp(DEV_URL))) return DEV_URL; // dev: hot reload
   if (fs.existsSync(path.join(DIST, "index.html"))) {
-    return startStaticServer(); // production: serve the build
+    return startStaticServer(); // serve the built app
   }
   // Nothing built yet — fall back to the dev server URL with a hint.
   console.warn(
