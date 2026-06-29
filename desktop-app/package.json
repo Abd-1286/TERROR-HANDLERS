@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "main.js", 
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build:web": "npm --prefix ../web-app run build",
+    "app": "npm run build:web && electron ."
   },
   "devDependencies": {
     "electron": "^31.0.0"
