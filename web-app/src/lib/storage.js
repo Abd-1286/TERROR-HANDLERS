@@ -11,7 +11,19 @@ export const KEYS = {
   cashflowItems: "findesk.cashflow.items",
   cashflowBalance: "findesk.cashflow.balance",
   anomalies: "findesk.anomalies",
+  settings: "findesk.settings",
 };
+
+// Every key holding user data — used by Settings for export / import / clear.
+export const DATA_KEYS = [
+  KEYS.deductions,
+  KEYS.deductionRate,
+  KEYS.subscriptions,
+  KEYS.cashflowItems,
+  KEYS.cashflowBalance,
+  KEYS.anomalies,
+  KEYS.settings,
+];
 
 export function loadJSON(key, fallback) {
   try {

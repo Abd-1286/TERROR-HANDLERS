@@ -3,10 +3,27 @@
 
 const OLLAMA_URL = "http://localhost:11434";
 
-// The model used for classification. Must match a model you've pulled in Ollama
-// (run `ollama list` to see them). qwen2.5-coder:7b is strong at structured JSON
-// output. Swap for qwen2.5:3b (smaller/faster) or any installed model here.
-export const DEFAULT_MODEL = "qwen2.5-coder:7b";
+// The model used for classification. Capped at 3B params (see MAX_MODEL_B).
+// qwen2.5-coder:3b is the strongest ≤3B option for structured JSON output.
+// Pull it with: ollama pull qwen2.5-coder:3b
+export const DEFAULT_MODEL = "qwen2.5-coder:3b";
+
+// Hard cap on model size (in billions of parameters).
+export const MAX_MODEL_B = 3;
+
+// Parse the parameter size (in billions) from a model name, e.g.
+// "qwen2.5-coder:3b" -> 3, "llama3.2:1.5b" -> 1.5, "phi3:mini" -> null.
+export function modelSizeB(name) {
+  const tag = name.includes(":") ? name.slice(name.lastIndexOf(":") + 1) : name;
+  const m = tag.match(/(\d+(?:\.\d+)?)\s*b/i);
+  return m ? parseFloat(m[1]) : null;
+}
+
+// A model is allowed if it's at or under the cap (or its size can't be read).
+export function isModelAllowed(name) {
+  const size = modelSizeB(name);
+  return size == null || size <= MAX_MODEL_B;
+}
 
 // Check that Ollama is running and report which models are installed.
 // Returns { ok: true, models: [...] } or { ok: false, error: "..." }.

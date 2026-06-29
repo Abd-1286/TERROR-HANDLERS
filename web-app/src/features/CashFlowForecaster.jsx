@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import OllamaBanner from "../components/OllamaBanner";
-import { checkOllama, DEFAULT_MODEL } from "../lib/ollama";
+import { checkOllama } from "../lib/ollama";
+import { useModel } from "../lib/settings";
 import { usePersistentState, KEYS } from "../lib/storage";
 import {
   extractRecurring,
@@ -30,7 +31,7 @@ const prettyDate = (iso) =>
 
 export default function CashFlowForecaster() {
   const [ollama, setOllama] = useState({ ok: null });
-  const [model] = useState(DEFAULT_MODEL);
+  const model = useModel();
 
   const [startingBalance, setStartingBalance] = usePersistentState(
     KEYS.cashflowBalance,

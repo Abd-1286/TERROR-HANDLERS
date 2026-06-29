@@ -7,6 +7,7 @@ export const FEATURES = [
   { id: "subscriptions", label: "Subscription Manager", icon: "🔁", ready: true },
   { id: "cashflow", label: "Cash-Flow Forecaster", icon: "📈", ready: true },
   { id: "anomalies", label: "Spending Anomalies", icon: "🚨", ready: true },
+  { id: "settings", label: "Settings", icon: "⚙️", ready: true },
 ];
 
 export default function Sidebar({ active, onSelect }) {

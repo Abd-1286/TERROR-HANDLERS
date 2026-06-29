@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import OllamaBanner from "../components/OllamaBanner";
-import { checkOllama, DEFAULT_MODEL } from "../lib/ollama";
+import { checkOllama } from "../lib/ollama";
+import { useModel } from "../lib/settings";
 import { usePersistentState, KEYS } from "../lib/storage";
 import { CATALOG_OPTIONS } from "../data/subscriptionCatalog";
 import {
@@ -23,7 +24,7 @@ const periodSuffix = (period) => (period === "yearly" ? "/yr" : "/mo");
 
 export default function SubscriptionManager() {
   const [ollama, setOllama] = useState({ ok: null });
-  const [model] = useState(DEFAULT_MODEL);
+  const model = useModel();
 
   const [text, setText] = useState("");
   const [extracting, setExtracting] = useState(false);

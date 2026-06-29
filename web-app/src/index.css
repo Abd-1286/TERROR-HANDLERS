@@ -27,3 +27,46 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #334155 transparent;
 }
+
+/* ---- Accessibility: text size (scales rem-based Tailwind sizing) ---- */
+html[data-text-size="small"] {
+  font-size: 14px;
+}
+html[data-text-size="normal"] {
+  font-size: 16px;
+}
+html[data-text-size="large"] {
+  font-size: 18px;
+}
+html[data-text-size="xl"] {
+  font-size: 20px;
+}
+
+/* ---- Accessibility: reduce motion ---- */
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  transition: none !important;
+  animation: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* ---- Accessibility: high contrast (brighten muted text + borders) ---- */
+html[data-contrast="high"] .text-slate-600 {
+  color: #cbd5e1 !important;
+}
+html[data-contrast="high"] .text-slate-500 {
+  color: #cbd5e1 !important;
+}
+html[data-contrast="high"] .text-slate-400 {
+  color: #e2e8f0 !important;
+}
+html[data-contrast="high"] .border-slate-800 {
+  border-color: #475569 !important;
+}
+
+/* ---- Always show a clear focus ring for keyboard users ---- */
+:focus-visible {
+  outline: 2px solid #34d399;
+  outline-offset: 2px;
+}

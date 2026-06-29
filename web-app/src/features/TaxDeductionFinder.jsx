@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import OllamaBanner from "../components/OllamaBanner";
-import { checkOllama, DEFAULT_MODEL } from "../lib/ollama";
+import { checkOllama } from "../lib/ollama";
+import { useModel } from "../lib/settings";
 import { usePersistentState, KEYS } from "../lib/storage";
 import { parseCSV, rowsToTransactions } from "../lib/csv";
 import { classifyTransactions, summarize } from "../lib/deductions";
@@ -11,7 +12,7 @@ const money = (n) =>
 
 export default function TaxDeductionFinder() {
   const [ollama, setOllama] = useState({ ok: null });
-  const [model] = useState(DEFAULT_MODEL);
+  const model = useModel();
   // marginal tax rate for savings estimate (persisted)
   const [rate, setRate] = usePersistentState(KEYS.deductionRate, 0.24);
 

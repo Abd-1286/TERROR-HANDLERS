@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import OllamaBanner from "../components/OllamaBanner";
-import { checkOllama, DEFAULT_MODEL } from "../lib/ollama";
+import { checkOllama } from "../lib/ollama";
+import { useModel } from "../lib/settings";
 import { usePersistentState, loadJSON, KEYS } from "../lib/storage";
 import { parseCSV, rowsToTransactions } from "../lib/csv";
 import { detectAnomalies, explainAnomalies } from "../lib/anomalies";
@@ -11,7 +12,7 @@ const money = (n) =>
 
 export default function SpendingAnomalies() {
   const [ollama, setOllama] = useState({ ok: null });
-  const [model] = useState(DEFAULT_MODEL);
+  const model = useModel();
 
   const [txns, setTxns] = usePersistentState(KEYS.anomalies, []);
   const [aiReasons, setAiReasons] = useState({}); // id -> AI explanation

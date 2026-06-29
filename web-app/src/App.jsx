@@ -7,6 +7,7 @@ import TaxDeductionFinder from "./features/TaxDeductionFinder";
 import SubscriptionManager from "./features/SubscriptionManager";
 import CashFlowForecaster from "./features/CashFlowForecaster";
 import SpendingAnomalies from "./features/SpendingAnomalies";
+import Settings from "./features/Settings";
 
 export default function App() {
   // The full app runs in the desktop (Electron) build. In a plain browser we
@@ -27,6 +28,7 @@ export default function App() {
         {active === "subscriptions" && <SubscriptionManager />}
         {active === "cashflow" && <CashFlowForecaster />}
         {active === "anomalies" && <SpendingAnomalies />}
+        {active === "settings" && <Settings />}
       </main>
     </div>
   );
