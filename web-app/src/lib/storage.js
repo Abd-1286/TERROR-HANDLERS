@@ -11,6 +11,7 @@ export const KEYS = {
   cashflowItems: "findesk.cashflow.items",
   cashflowBalance: "findesk.cashflow.balance",
   anomalies: "findesk.anomalies",
+  goals: "findesk.goals",
   settings: "findesk.settings",
 };
 
@@ -22,6 +23,7 @@ export const DATA_KEYS = [
   KEYS.cashflowItems,
   KEYS.cashflowBalance,
   KEYS.anomalies,
+  KEYS.goals,
   KEYS.settings,
 ];
 

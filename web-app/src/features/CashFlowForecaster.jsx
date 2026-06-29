@@ -298,13 +298,13 @@ function ForecastChart({ forecast }) {
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img">
         <defs>
           <linearGradient id="cf-fill" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#10b981" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+            <stop offset="0%" style={{ stopColor: "var(--accent)" }} stopOpacity="0.35" />
+            <stop offset="100%" style={{ stopColor: "var(--accent)" }} stopOpacity="0" />
           </linearGradient>
         </defs>
 
         <path d={area} fill="url(#cf-fill)" />
-        <path d={line} fill="none" stroke="#10b981" strokeWidth="2" />
+        <path d={line} fill="none" style={{ stroke: "var(--accent)" }} strokeWidth="2" />
 
         {showZero && (
           <>
@@ -329,7 +329,7 @@ function ForecastChart({ forecast }) {
             cx={x(minIdx)}
             cy={y(forecast.minBalance)}
             r="4"
-            fill={danger ? "#ef4444" : "#10b981"}
+            style={{ fill: danger ? "#ef4444" : "var(--accent)" }}
             stroke="#0b0f14"
             strokeWidth="2"
           />

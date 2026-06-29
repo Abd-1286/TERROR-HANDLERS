@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { useSettings } from "../lib/settings";
+import { useSettings, ACCENTS } from "../lib/settings";
+import { useT, LANGUAGES } from "../lib/i18n";
 import { checkOllama, isModelAllowed, MAX_MODEL_B } from "../lib/ollama";
 import { DATA_KEYS } from "../lib/storage";
 
 export default function Settings() {
   const { settings, update } = useSettings();
+  const t = useT();
   const [ollama, setOllama] = useState({ ok: null });
   const [note, setNote] = useState("");
   const fileRef = useRef(null);
@@ -63,16 +65,13 @@ export default function Settings() {
   return (
     <div className="p-8 max-w-3xl mx-auto">
       <header className="mb-6">
-        <h2 className="text-2xl font-bold text-white">Settings</h2>
-        <p className="text-slate-400 text-sm mt-1">
-          Accessibility, the local AI model, and your data — all stored on this
-          device.
-        </p>
+        <h2 className="text-2xl font-bold text-white">{t("set.title")}</h2>
+        <p className="text-slate-400 text-sm mt-1">{t("set.subtitle")}</p>
       </header>
 
       {/* Accessibility */}
-      <Section title="Accessibility">
-        <Row label="Text size" hint="Scales the whole interface.">
+      <Section title={t("set.a11y")}>
+        <Row label={t("set.textSize")} hint={t("set.textSizeHint")}>
           <Segmented
             value={settings.textSize}
             options={[
@@ -84,13 +83,13 @@ export default function Settings() {
             onChange={(v) => update({ textSize: v })}
           />
         </Row>
-        <Row label="High contrast" hint="Brighten muted text and borders.">
+        <Row label={t("set.contrast")} hint={t("set.contrastHint")}>
           <Toggle
             on={settings.highContrast}
             onChange={(v) => update({ highContrast: v })}
           />
         </Row>
-        <Row label="Reduce motion" hint="Turn off animations and transitions.">
+        <Row label={t("set.motion")} hint={t("set.motionHint")}>
           <Toggle
             on={settings.reduceMotion}
             onChange={(v) => update({ reduceMotion: v })}
@@ -98,8 +97,39 @@ export default function Settings() {
         </Row>
       </Section>
 
+      {/* Theme */}
+      <Section title={t("set.theme")}>
+        <Row label={t("set.mode")} hint={t("set.modeHint")}>
+          <Segmented
+            value={settings.theme}
+            options={[
+              { value: "dark", label: t("set.dark") },
+              { value: "light", label: t("set.light") },
+            ]}
+            onChange={(v) => update({ theme: v })}
+          />
+        </Row>
+        <Row label={t("set.accent")} hint={t("set.accentHint")}>
+          <AccentSwatches
+            value={settings.accent}
+            onChange={(hex) => update({ accent: hex })}
+          />
+        </Row>
+      </Section>
+
+      {/* Language */}
+      <Section title={t("set.language")}>
+        <Row label={t("set.languageLabel")} hint={t("set.languageHint")}>
+          <Segmented
+            value={settings.language}
+            options={LANGUAGES.map((l) => ({ value: l.code, label: l.label }))}
+            onChange={(v) => update({ language: v })}
+          />
+        </Row>
+      </Section>
+
       {/* AI model */}
-      <Section title="Local AI model">
+      <Section title={t("set.model")}>
         <Row
           label="Model"
           hint={
@@ -114,7 +144,6 @@ export default function Settings() {
               onChange={(e) => update({ model: e.target.value })}
               className="bg-slate-950 border border-slate-800 rounded-md px-3 py-1.5 text-sm text-slate-100"
             >
-              {/* keep the current value selectable even if not in the list */}
               {!installedModels.includes(settings.model) && (
                 <option value={settings.model}>{settings.model} (not installed)</option>
               )}
@@ -155,23 +184,20 @@ export default function Settings() {
       </Section>
 
       {/* Data */}
-      <Section title="Your data">
-        <p className="text-sm text-slate-400 mb-4">
-          Everything you enter is saved only in this app on this device. Back it up
-          or move it to another machine with export / import.
-        </p>
+      <Section title={t("set.data")}>
+        <p className="text-sm text-slate-400 mb-4">{t("set.dataNote")}</p>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={exportData}
             className="rounded-lg bg-slate-800 hover:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-100 transition"
           >
-            Export backup
+            {t("set.export")}
           </button>
           <button
             onClick={() => fileRef.current?.click()}
             className="rounded-lg bg-slate-800 hover:bg-slate-700 px-4 py-2 text-sm font-medium text-slate-100 transition"
           >
-            Import backup
+            {t("set.import")}
           </button>
           <input
             ref={fileRef}
@@ -184,7 +210,7 @@ export default function Settings() {
             onClick={clearData}
             className="rounded-lg bg-red-500/90 hover:bg-red-500 px-4 py-2 text-sm font-semibold text-white transition"
           >
-            Clear all data
+            {t("set.clear")}
           </button>
         </div>
         {note && <p className="text-sm text-amber-300 mt-3">{note}</p>}
@@ -231,6 +257,31 @@ function Segmented({ value, options, onChange }) {
           {o.label}
         </button>
       ))}
+    </div>
+  );
+}
+
+function AccentSwatches({ value, onChange }) {
+  return (
+    <div className="flex items-center gap-2.5">
+      {ACCENTS.map((a) => {
+        const isActive = value.toLowerCase() === a.hex.toLowerCase();
+        return (
+          <button
+            key={a.hex}
+            title={a.name}
+            aria-label={a.name}
+            onClick={() => onChange(a.hex)}
+            className={[
+              "h-7 w-7 rounded-full transition",
+              isActive
+                ? "ring-2 ring-white ring-offset-2 ring-offset-slate-900"
+                : "hover:scale-110",
+            ].join(" ")}
+            style={{ backgroundColor: a.hex }}
+          />
+        );
+      })}
     </div>
   );
 }

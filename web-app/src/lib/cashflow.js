@@ -37,7 +37,9 @@ function clampDay(d) {
 
 // Project the daily balance forward `horizonDays` days from today, applying each
 // recurring item on its day-of-month (clamped to the last day of short months).
-export function projectCashFlow(startingBalance, items, horizonDays) {
+// Optional `oneTime` = { dayOffset, amount } applies a single signed amount once
+// (positive = windfall, negative = expense) — used by the What-If simulator.
+export function projectCashFlow(startingBalance, items, horizonDays, oneTime = null) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -69,6 +71,12 @@ export function projectCashFlow(startingBalance, items, horizonDays) {
         else totalExpense += it.amount;
         events.push({ label: it.label, amount: signed });
       }
+    }
+
+    // One-time event (applied once at its day offset).
+    if (oneTime && oneTime.amount && d === oneTime.dayOffset) {
+      balance += oneTime.amount;
+      events.push({ label: "One-time", amount: oneTime.amount });
     }
 
     series.push({ date: iso(date), balance, events });
